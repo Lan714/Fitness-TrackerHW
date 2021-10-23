@@ -1,3 +1,5 @@
+const { default: axios } = require("axios");
+
 const workoutTypeSelect = document.querySelector("#type");
 const cardioForm = document.querySelector(".cardio-form");
 const resistanceForm = document.querySelector(".resistance-form");
@@ -142,8 +144,20 @@ if (workoutTypeSelect) {
 }
 if (completeButton) {
   completeButton.addEventListener("click", function (event) {
-    shouldNavigateAway = true;
-    handleFormSubmit(event);
+    event.preventDefault()
+    let workout = {
+      type: workoutTypeSelect,
+      name: nameInput || cardioNameInput,
+      weight: weightInput,
+      sets: setsInput,
+      reps: repsInput,
+      duration: durationInput || resistanceDurationInput,
+      distance: distanceInput
+    }
+    axios.post('/api/workouts', workout)
+    .then(() => {
+      window.location = '/stats'
+    })
   });
 }
 if (addButton) {
